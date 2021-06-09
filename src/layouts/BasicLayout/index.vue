@@ -24,7 +24,7 @@
   </div>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import AppHeaderTabs from '../AppHeaderTabs/index.vue'
 import AppMenu from '../AppMenu/index.vue'
 
@@ -37,18 +37,18 @@ export default {
 }
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .basic-layout {
-  height: 100vh;
-  overflow: hidden;
   display: flex;
+  overflow: hidden;
+  height: 100vh;
 
   .aside {
     display: flex;
-    flex-direction: column;
     flex: 0 0 200px;
+    flex-direction: column;
     background-color: palevioletred;
-    
+
     .logo-container {
       flex: 0 0 60px;
       background-color: #555;
@@ -58,15 +58,15 @@ export default {
       flex: 1;
     }
   }
-  
+
   .main {
-    flex: 1;
     display: flex;
+    flex: 1;
     flex-direction: column;
-    
+
     .header {
-      flex: 0 0 60px;
       display: flex;
+      flex: 0 0 60px;
       background-color: #999;
 
       .tabs {
@@ -75,8 +75,8 @@ export default {
     }
 
     main {
-      flex: 1;
       min-height: 0;
+      flex: 1;
       overflow-y: auto;
     }
   }
