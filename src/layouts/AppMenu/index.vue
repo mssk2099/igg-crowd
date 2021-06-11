@@ -1,10 +1,10 @@
 <template>
-  <AMenu mode="inline">
+  <AMenu mode="inline" @click="onClick">
     <template v-for="group in menu">
       <SubMenu :key="group.path">
         <span slot="title">{{ group.meta.title }}</span>
         <template v-for="item in group.children">
-          <Item :key="`${group.path}/${item.path}`">
+          <Item :key="item.meta.fullPath">
             {{ item.meta.title }}
           </Item>
         </template>
@@ -18,6 +18,7 @@ import { defineComponent } from '@vue/composition-api'
 import { Menu } from 'ant-design-vue'
 import { dynamicRoutes } from '../../router/config'
 import { createMenuConfig } from '../../router/menu'
+import { useRouter } from '../../use/useRouter'
 
 const { SubMenu, Item } = Menu
 
@@ -28,8 +29,15 @@ export default defineComponent({
     Item
   },
   setup() {
+    const router = useRouter()
+
+    function onClick({ key }) {
+      router.push(key)
+    }
+
     return {
-      menu: createMenuConfig(dynamicRoutes)
+      menu: createMenuConfig(dynamicRoutes),
+      onClick
     }
   }
 })

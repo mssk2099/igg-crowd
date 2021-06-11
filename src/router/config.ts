@@ -1,6 +1,7 @@
 import { RouteConfig } from 'vue-router'
 import { BasicLayout } from '../layouts'
 import Home from '../views/Home.vue'
+import { assignRoutes } from './utils'
 
 export const dynamicRoutes: RouteConfig[] = [
   // 平台公告
@@ -70,4 +71,6 @@ const staticRoutes: Array<RouteConfig> = [
   { path: '/503' }
 ]
 
-export const routes = staticRoutes
+export const routes = assignRoutes(staticRoutes)
+
+console.log('routes', routes)
