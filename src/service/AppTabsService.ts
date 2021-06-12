@@ -11,20 +11,21 @@ export type AppTabItem = {
   pin: boolean
 }
 
-class AppTabsService {
+const LS_KEY = 'crowd-app-tabs'
+
+export class AppTabsService {
   tabs: AppTabItem[] = []
 
   active: Nullable<AppTabItem> = null
 
   constructor(private routes: RouteConfig[]) {
-    const pinned = findRoute(this.routes, route => !!route.meta.pin)
-    if (pinned) {
-      this.tabs.push({
-        path: pinned.meta.fullPath,
-        route: pinned,
-        pin: true
-      })
-      this.active = this.tabs[0]
+    if (this.resumeTabs()) {
+      //
+    } else {
+      const pinned = findRoute(this.routes, route => !!route.meta.pin)
+      if (pinned) {
+        this.add(pinned.meta.fullPath)
+      }
     }
   }
 
@@ -37,12 +38,14 @@ class AppTabsService {
     } else {
       this.active = tab
     }
+
+    this.saveTabs()
   }
 
   add(path: string): AppTabItem {
     const route = findRoute(this.routes, route => route.meta.fullPath === path)
     if (!route) {
-      throw new Error(`path no found: ${path}`)
+      throw new Error(`path ${path} no found`)
     }
 
     const tab: AppTabItem = {
@@ -56,7 +59,7 @@ class AppTabsService {
     return tab
   }
 
-  setActive(path: string) {
+  activeTabAndNavigate(path: string) {
     const tab = this.find(path)
 
     if (!tab) {
@@ -76,10 +79,46 @@ class AppTabsService {
     return this.tabs.find(tab => tab.path === path)
   }
 
+  saveTabs() {
+    localStorage.setItem(
+      LS_KEY,
+      JSON.stringify(
+        this.tabs.map(tab => ({
+          path: tab.path,
+          active: tab === this.active
+        }))
+      )
+    )
+  }
+
+  resumeTabs() {
+    const value = localStorage.getItem(LS_KEY)
+    if (!value) return false
+
+    try {
+      const path = JSON.parse(value) as { path: string; active: boolean }[]
+      path.forEach(p => {
+        this.add(p.path)
+        if (p.active) {
+          const active = this.find(p.path)
+          if (active) {
+            this.active = active
+          }
+        }
+      })
+      return true
+    } catch (e) {
+      //
+    }
+    return false
+  }
+
   closeByIndex(index: number) {
-    this.tabs.splice(index, 1)
-    const next = Math.max(index--, 0)
-    this.active = this.tabs[next]
+    const [removed] = this.tabs.splice(index, 1)
+    if (removed === this.active) {
+      const next = Math.max(index - 1, 0)
+      this.active = this.tabs[next]
+    }
   }
 }
 

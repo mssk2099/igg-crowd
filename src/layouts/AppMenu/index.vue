@@ -31,7 +31,7 @@ export default defineComponent({
   setup() {
     const router = useRouter()
 
-    function onClick({ key }) {
+    function onClick({ key }: { key: string }) {
       router.push(key)
     }
 

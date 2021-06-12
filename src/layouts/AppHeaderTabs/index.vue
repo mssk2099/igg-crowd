@@ -10,11 +10,14 @@
           <div class="title">
             {{ tab.route.meta.title }}
           </div>
-          <div class="action">
-            <button @click.prevent="onClose(index)">
-              X
-            </button>
-          </div>
+          <button
+            v-if="!tab.pin"
+            class="btn-close"
+            type="button"
+            @click.prevent="onClose(index)"
+          >
+            X
+          </button>
         </li>
       </template>
     </ol>
@@ -22,19 +25,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, toRef } from '@vue/composition-api'
-import { AppTabItem } from '../../service/AppTabsService'
+import { defineComponent, toRef } from '@vue/composition-api'
+import { AppTabItem, appTabsService } from '../../service/AppTabsService'
 
 export default defineComponent({
   setup() {
-    const appTabsService = inject('appTabsService')
-
     const tabs = toRef(appTabsService, 'tabs')
 
     const active = toRef(appTabsService, 'active')
 
     function onClick(tab: AppTabItem) {
-      appTabsService.setActive(tab.path)
+      appTabsService.activeTabAndNavigate(tab.path)
     }
 
     function onClose(index: number) {
@@ -66,9 +67,19 @@ export default defineComponent({
   li {
     display: flex;
     align-items: center;
-    padding: 0 8px;
     margin: 0 8px;
     background-color: #fff;
+    cursor: pointer;
+
+    .title {
+      padding: 0 12px;
+    }
+
+    .btn-close {
+      background-color: #eee;
+      border: none;
+      cursor: pointer;
+    }
 
     &.active {
       background-color: #ff5e5e;

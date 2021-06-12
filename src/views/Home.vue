@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    home
+    <input type="text" value="home">
   </div>
 </template>
 

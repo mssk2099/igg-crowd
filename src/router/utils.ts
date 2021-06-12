@@ -1,6 +1,7 @@
 import { pascalCase } from 'change-case'
 import path from 'path'
 import { RouteConfig } from 'vue-router'
+import { RouteMeta } from '../typing'
 
 /**
  * - Compute `fullPath` of route
@@ -13,9 +14,11 @@ export const assignRoutes = (routes: RouteConfig[]) => {
     routes.forEach(route => {
       route.meta = route.meta || {}
 
-      route.meta.parent = parent
+      const meta: RouteMeta = route.meta
 
-      route.meta.fullPath = parent
+      meta.parent = parent
+
+      meta.fullPath = parent
         ? path.join(parent.meta.fullPath, route.path)
         : route.path || '/'
 

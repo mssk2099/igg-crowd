@@ -3,13 +3,21 @@ import { BasicLayout } from '../layouts'
 import Home from '../views/Home.vue'
 import { assignRoutes } from './utils'
 
+/**
+ * Route meta type defined in typing.ts
+ */
+
 export const dynamicRoutes: RouteConfig[] = [
   // 平台公告
   {
     path: 'notice',
     meta: { title: '平台公告' },
     children: [
-      { path: 'list', meta: { title: '公告列表' } },
+      {
+        path: 'list',
+        meta: { title: '公告列表' },
+        component: () => import('../views/notice/notice-list/index.vue')
+      },
       { path: 'manage', meta: { title: '公告管理' } }
     ]
   },
@@ -57,7 +65,6 @@ const staticRoutes: Array<RouteConfig> = [
         path: 'home',
         meta: {
           title: '首页',
-          tabbable: true,
           pin: true,
           menu: { visible: false }
         },
