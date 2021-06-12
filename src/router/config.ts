@@ -1,5 +1,5 @@
 import { RouteConfig } from 'vue-router'
-import { BasicLayout } from '../layouts'
+import { BlankLayout, BasicLayout } from '../layouts'
 import Home from '../views/Home.vue'
 import { assignRoutes } from './utils'
 
@@ -12,6 +12,7 @@ export const dynamicRoutes: RouteConfig[] = [
   {
     path: 'notice',
     meta: { title: '平台公告' },
+    component: BlankLayout,
     children: [
       {
         path: 'list',
