@@ -1,6 +1,6 @@
 import { RouteConfig } from 'vue-router'
 import { BlankLayout, BasicLayout } from '../layouts'
-import Home from '../views/Home.vue'
+import Home from '../views/example/index.vue'
 import { assignRoutes } from './utils'
 
 /**

@@ -38,8 +38,6 @@ export class AppTabsService {
     } else {
       this.active = tab
     }
-
-    this.saveTabs()
   }
 
   add(path: string): AppTabItem {
@@ -55,6 +53,8 @@ export class AppTabsService {
     }
 
     this.tabs.push(tab)
+
+    this.saveTabs()
 
     return tab
   }
@@ -73,6 +73,15 @@ export class AppTabsService {
     this.active = tab
 
     router.push({ path: tab.path })
+  }
+
+  closeByIndex(index: number) {
+    const [removed] = this.tabs.splice(index, 1)
+    if (removed === this.active) {
+      const next = Math.max(index - 1, 0)
+      this.active = this.tabs[next]
+      this.saveTabs()
+    }
   }
 
   find(path: string) {
@@ -111,14 +120,6 @@ export class AppTabsService {
       //
     }
     return false
-  }
-
-  closeByIndex(index: number) {
-    const [removed] = this.tabs.splice(index, 1)
-    if (removed === this.active) {
-      const next = Math.max(index - 1, 0)
-      this.active = this.tabs[next]
-    }
   }
 }
 
