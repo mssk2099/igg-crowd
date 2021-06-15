@@ -3,11 +3,36 @@
     <PageActionBar>
       <AButton>添加</AButton>
     </PageActionBar>
+
     <SearchForm :service="list">
       <a-form-model-item label="Title" prop="title">
         <a-input v-model="list.search.title" />
       </a-form-model-item>
     </SearchForm>
+
+    <CoreTable
+      :service="list"
+      :table-props="{
+        columns: [
+          {
+            title: 'Title',
+            dataIndex: 'title'
+          },
+          {
+            title: '操作',
+            key: 'actions',
+            scopedSlots: { customRender: 'actions' }
+          }
+        ]
+      }"
+    >
+      <ASpace slot="actions">
+        <a>编辑</a>
+        <RemoveConfirm :service="edit">
+          删除
+        </RemoveConfirm>
+      </ASpace>
+    </CoreTable>
   </Page>
 </template>
 
@@ -24,7 +49,8 @@ export default defineComponent({
 
     return {
       store,
-      list: store.list
+      list: store.list,
+      edit: store.edit
     }
   }
 })

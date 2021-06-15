@@ -13,8 +13,8 @@ export const initAxiosMock = () => {
       'items|20': [
         {
           'id|+1': 1,
-          title: mockjs.Random.ctitle(),
-          content: mockjs.Random.csentence()
+          title: '@ctitle',
+          content: '@csentence'
         }
       ],
       total: 55

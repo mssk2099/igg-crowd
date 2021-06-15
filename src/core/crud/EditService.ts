@@ -1,5 +1,4 @@
-import { FormModel } from 'ant-design-vue'
-import { GET, POST } from '../request'
+import { request } from '../request'
 import { ListService } from './ListService'
 
 /**
@@ -8,9 +7,9 @@ import { ListService } from './ListService'
  *   P: edit params typing
  */
 export abstract class EditService<
-  Store extends { list?: ListService<P> },
-  T,
-  P
+  Store extends { list?: ListService<any> },
+  T = unknown,
+  P = T
 > {
   /**
    * Modal visible sate
@@ -42,9 +41,9 @@ export abstract class EditService<
    */
   saving = false
 
-  formRef: FormModel | null = null
+  validator = (() => Promise.resolve()) as () => void | Promise<any>
 
-  protected constructor(protected store: Store) {}
+  constructor(protected store: Store) {}
 
   /**
    * @public
@@ -78,16 +77,14 @@ export abstract class EditService<
   public async onEditSubmit() {
     console.log('onEditSubmit', this.data)
 
-    if (!this.formRef) {
-      throw new Error('formRef unset')
-    }
-
     this.saving = true
 
     try {
-      await this.formRef.validate()
+      if (typeof this.validator === 'function') {
+        await this.validator()
+      }
 
-      await POST(this.getSubmitURL(), {
+      await request.post(this.getSubmitURL(), {
         data: this.data
       })
 
@@ -117,7 +114,7 @@ export abstract class EditService<
   async fetchFromData() {
     this.loading = true
     try {
-      const { data } = await GET(this.getFetchURL(), {
+      const { data } = await request.get(this.getFetchURL(), {
         data: this.getFetchParams()
       })
       this.data = this.mapFetchedToFormData(data)
