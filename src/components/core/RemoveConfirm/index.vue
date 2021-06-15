@@ -17,14 +17,16 @@ export default defineComponent({
   props: {
     service: {
       type: Object as () => EditService<unknown>
+    },
+    data: {
+      required: true
     }
   },
   setup(props) {
     const { service } = props
 
     function onConfirm() {
-      //TODO pass row data
-      service.onRemove({})
+      service.onRemove(this.data)
     }
 
     return {

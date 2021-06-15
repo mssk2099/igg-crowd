@@ -26,9 +26,9 @@
         ]
       }"
     >
-      <ASpace slot="actions">
+      <ASpace slot="actions" slot-scope="_, record">
         <a>编辑</a>
-        <RemoveConfirm :service="edit">
+        <RemoveConfirm :service="edit" :data="record">
           删除
         </RemoveConfirm>
       </ASpace>

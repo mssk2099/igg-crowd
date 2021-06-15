@@ -48,24 +48,14 @@ export default defineComponent({
           props: this.tableProps,
           on: {
             change: this.onChange
-          }
+          },
+          slot: this.$slot,
+          scopedSlots: this.$scopedSlots
         }}
-      >
-        {Object.keys(this.$slots).map(name => (
-          <template slot={name}>{this.$slots[name]}</template>
-        ))}
-      </ATable>
+      />
     )
   }
 })
 </script>
 
 <style scoped></style>
-
-<!--
-:data-source="service.items"
-:row-key="row => row.id"
-:pagination="pagination"
-:loading="service.loading"
-v-bind="tableProps"
-@change="onChange"-->
