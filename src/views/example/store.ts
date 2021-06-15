@@ -3,7 +3,7 @@ import { Post } from './types'
 
 class List extends ListService<Store, Post> {
   getFetchURL(): string {
-    return 'posts'
+    return '/posts'
   }
 }
 

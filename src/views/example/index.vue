@@ -20,6 +20,8 @@ export default defineComponent({
     const store = new Store()
     provide('store', store)
 
+    store.list.fetch()
+
     return {
       store,
       list: store.list

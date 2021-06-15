@@ -1,8 +1,15 @@
 import { defaultErrorHandler, showMessage } from '../message'
-import { GET, PaginationData } from '../request'
+import { request } from '../request'
 
 type ListFetchOption = {
   reset?: boolean
+}
+
+type PaginationData<T> = {
+  items: T[]
+  page: number
+  size: number
+  total: number
 }
 
 const log = require('debug')('ListService')
@@ -50,7 +57,7 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
    */
   search = {} as Partial<S>
 
-  searchValidator = () => Promise.resolve() as void | Promise<any>
+  searchValidator = (() => Promise.resolve()) as () => void | Promise<any>
 
   /**
    * Keep Store ref, then user could track typing in Component
@@ -62,8 +69,6 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
 
   /**
    * Handle page index change event
-   *
-   * @public
    */
   public async handlePageIndexChange(index: number): Promise<void> {
     this.page = index
@@ -72,8 +77,6 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
 
   /**
    * Handle search form submit event
-   *
-   * @public
    */
   public async handlerSearchSubmit(): Promise<void> {
     try {
@@ -82,8 +85,9 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
       }
       await this.fetch({ reset: true })
     } catch (e) {
+      console.error(e)
       // TODO get validate info
-      showMessage('请检查表单')
+      showMessage('请检查表单是否填写完整')
     }
   }
 
@@ -112,13 +116,13 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
 
       log(`fetch ${url} with params`, params)
 
-      const res = await GET(url, {
+      const res = await request.get(url, {
         data: params
       })
 
-      const data = res.data as PaginationData<T>
-      this.items = this.mapListItemsToVO(data.items)
-      this.total = data.total
+      const { items = [], total = 0 } = res.data as PaginationData<T>
+      this.items = this.mapListItemsToVO(items)
+      this.total = total
     } catch (e) {
       defaultErrorHandler(e)
     } finally {
@@ -136,7 +140,6 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
 
   /**
    * ListItemsDTO => ListItemsVO
-   * @param data
    */
   mapListItemsToVO(data: unknown[]): T[] {
     return data as T[]
@@ -151,8 +154,6 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
 
   /**
    * Should return a url in implement
-   *
-   * @abstract
    */
   abstract getFetchURL(): string
 }
