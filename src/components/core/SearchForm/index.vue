@@ -3,9 +3,9 @@
     <AFormModel
       ref="formRef"
       v-bind="{
-        ...formProps,
         model: service.search,
-        layout: 'inline'
+        layout: 'inline',
+        ...formProps
       }"
     >
       <slot />

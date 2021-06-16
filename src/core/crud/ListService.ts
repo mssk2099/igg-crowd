@@ -57,7 +57,7 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
    */
   search = {} as Partial<S>
 
-  searchValidator = (() => Promise.resolve()) as () => void | Promise<any>
+  searchValidator = (() => Promise.resolve()) as () => void | Promise<unknown>
 
   /**
    * Keep Store ref, then user could track typing in Component

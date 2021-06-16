@@ -7,13 +7,9 @@ const log = require('debug')('service:Edit')
 /**
  * EditService<Store, T, P>
  *   T: form-data typing
- *   P: edit params typing
+ *   P: edit params typing, use <T> default
  */
-export abstract class EditService<
-  Store extends { list?: ListService<any> },
-  T = unknown,
-  P = T
-> {
+export abstract class EditService<Store = any, T = any, P = T> {
   /**
    * Modal visible sate
    */
@@ -44,7 +40,7 @@ export abstract class EditService<
    */
   saving = false
 
-  validator = (() => Promise.resolve()) as () => void | Promise<any>
+  validator = (() => Promise.resolve()) as () => void | Promise<unknown>
 
   constructor(protected store: Store) {}
 
@@ -56,7 +52,7 @@ export abstract class EditService<
     this.loading = false
     this.saving = false
     this.visible = true
-    this.data = this.getDefaultFormData() as T
+    this.data = this.getInitialFormData() as T
   }
 
   /**
@@ -71,17 +67,16 @@ export abstract class EditService<
     this.visible = true
     this.params = params
     if (this.getFetchURL()) {
+      this.data = this.getInitialFormData() as T
       await this.fetchFormData()
     } else {
       this.data = this.mapToFormData(params)
     }
 
-    log('Edit formData', this.data)
+    log('onEdit formData', this.data)
   }
 
   public async onEditSubmit() {
-    console.log('onEditSubmit', this.data)
-
     this.saving = true
 
     try {
@@ -89,14 +84,19 @@ export abstract class EditService<
         await this.validator()
       }
 
-      await request.post(this.getSubmitURL(), {
-        data: this.data
+      const url = this.getSubmitURL()
+      const data = this.data
+
+      log('onEditSubmit', url, data)
+
+      await request.post(url, {
+        data
       })
 
       this.visible = false
       await this.requestListReload()
     } catch (e) {
-      // TODO
+      defaultErrorHandler(e)
     } finally {
       this.saving = false
     }
@@ -111,9 +111,25 @@ export abstract class EditService<
    * @public
    */
   public async onRemove(params: P) {
-    console.log('Remove', params)
     this.saving = true
-    await this.requestListReload()
+    this.params = params
+
+    try {
+      const url = this.getRemoveURL()
+      const params = {}
+
+      log('onRemove', url, params)
+
+      await request.delete(url, {
+        params
+      })
+
+      await this.requestListReload()
+    } catch (e) {
+      defaultErrorHandler(e)
+    } finally {
+      this.saving = false
+    }
   }
 
   async fetchFormData() {
@@ -125,7 +141,7 @@ export abstract class EditService<
       log('fetchFormData', url, params)
 
       const { data } = await request.get(url, {
-        data: params
+        params
       })
       this.data = this.mapToFormData(data)
     } catch (e) {
@@ -144,31 +160,28 @@ export abstract class EditService<
   }
 
   /**
-   * Return an initial form-data value when `create`
+   * Return an initial FormData when `create`
    */
-  getDefaultFormData(): Partial<T> {
+  getInitialFormData(): Partial<T> {
     return {}
   }
 
-  getRemoveURL(): string {
-    return ''
-  }
-
   async requestListReload() {
-    await this.store.list?.fetch()
+    await (this.store as { list?: ListService<unknown> }).list?.fetch()
   }
 
   /**
    * Should return url in implement
-   *
-   * @abstract
    */
   abstract getFetchURL(): string
 
   /**
    * Should return url in implement
-   *
-   * @abstract
    */
   abstract getSubmitURL(): string
+
+  /**
+   * Should return url in implement
+   */
+  abstract getRemoveURL(): string
 }

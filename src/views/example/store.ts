@@ -12,8 +12,13 @@ class Edit extends EditService<Store, Post> {
   getFetchURL(): string {
     return `/posts/${this.params.id}`
   }
+
   getSubmitURL(): string {
-    return ''
+    return this.isEdit ? `/posts/${this.params.id}` : '/posts'
+  }
+
+  getRemoveURL(): string {
+    return `/posts/${this.params.id}`
   }
 }
 

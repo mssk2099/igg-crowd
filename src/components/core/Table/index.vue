@@ -19,7 +19,7 @@ export default defineComponent({
   setup(props) {
     const { service } = props
 
-    const pagination = computed<Pagination>(() => ({
+    const pagination = computed<Partial<Pagination>>(() => ({
       current: service.page,
       total: service.total,
       pageSize: service.size,
@@ -54,7 +54,7 @@ export default defineComponent({
             rowKey: row => row.id,
             pagination,
             loading: service.loading,
-            ...tableProps
+            ...(tableProps as any)
           },
           on: {
             change: onChange

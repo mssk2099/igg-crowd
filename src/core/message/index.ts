@@ -9,11 +9,12 @@ export const defaultErrorHandler = (e: Error) => {
 
 export const showMessage = (
   content: string,
-  type: 'success' | 'info' | 'warn' | 'error' = 'success'
+  type: 'success' | 'info' | 'warn' | 'error' | 'loading' = 'success'
 ) => {
-  if (typeof message[type] === 'function') {
-    message[type]({
-      content
-    })
+  if (typeof message[type] !== 'function') {
+    throw new Error(`showMessage type undefined ${type}`)
   }
+  return message[type]({
+    content
+  })
 }

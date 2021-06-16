@@ -7,21 +7,26 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 import { EditService } from '../../../core/crud'
+import { showMessage } from '../../../core/message'
 
 export default defineComponent({
   props: {
     service: {
-      type: Object as () => EditService<unknown>
+      type: Object as () => EditService,
+      required: true
     },
     data: {
       required: true
     }
   },
   setup(props) {
-    const { service } = props
+    const { service, data } = props
 
-    function onConfirm() {
-      service.onRemove(this.data)
+    async function onConfirm() {
+      const hide = showMessage('正在删除', 'loading')
+      await service.onRemove(data)
+      hide()
+      showMessage('删除成功')
     }
 
     return {

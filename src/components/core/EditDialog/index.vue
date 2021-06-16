@@ -2,11 +2,13 @@
 import { computed, defineComponent } from '@vue/composition-api'
 import { Modal as AModal } from 'ant-design-vue'
 import { EditService } from '../../../core/crud'
+import EditForm from '../EditForm/index.vue'
 
 export default defineComponent({
   props: {
     service: {
-      type: Object as () => EditService<unknown>
+      type: Object as () => EditService,
+      required: true
     },
     modalProps: {
       type: Object as () => AModal
@@ -22,16 +24,21 @@ export default defineComponent({
     }
   },
   render() {
-    const { service, title, modalProps } = this
+    const { service, title, modalProps, $slots, $scopedSlots } = this
     return (
       <AModal
-        vModel={service.visible}
         {...{
           props: {
+            visible: service.visible,
             title,
-            confirmLoading: service.saving,
             width: 600,
             destroyOnClose: true,
+            confirmLoading: service.saving,
+            okButtonProps: {
+              props: {
+                disabled: service.loading
+              }
+            },
             ...modalProps
           },
           on: {
@@ -40,7 +47,15 @@ export default defineComponent({
           }
         }}
       >
-        A
+        <EditForm
+          {...{
+            props: {
+              service
+            } as any,
+            slots: $slots,
+            scopedSlots: $scopedSlots
+          }}
+        />
       </AModal>
     )
   }

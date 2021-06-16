@@ -36,15 +36,17 @@
       </ASpace>
     </CoreTable>
 
-    <EditDialog :service="edit" />
+    <Edit />
   </Page>
 </template>
 
 <script lang="ts">
 import { defineComponent, provide } from '@vue/composition-api'
 import { Store } from './store'
+import Edit from './edit.vue'
 
 export default defineComponent({
+  components: { Edit },
   setup() {
     const store = new Store()
     provide('store', store)
