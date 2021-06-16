@@ -38,4 +38,7 @@ export const posts = (mock: MockAdapter) => {
 
     .onPut(/api\/posts\/\d+/)
     .reply(200, Response({}))
+
+    .onDelete(/api\/posts\/\d+/)
+    .reply(200, Response({}))
 }

@@ -114,7 +114,7 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
         ...this.mapSearchParams()
       }
 
-      log(`fetch ${url} with params`, params)
+      log(`fetch ${url}`, params)
 
       const res = await request.get(url, {
         data: params
