@@ -71,6 +71,7 @@ export class AppTabsService {
     }
 
     this.active = tab
+    this.saveTabs()
 
     router.push({ path: tab.path })
   }
