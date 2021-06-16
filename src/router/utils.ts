@@ -16,7 +16,8 @@ export const assignRoutes = (routes: RouteConfig[]) => {
 
       const meta: RouteMeta = route.meta
 
-      meta.parent = parent
+      // TODO prevent circular structure in logger
+      // meta.parent = parent
 
       meta.fullPath = parent
         ? path.join(parent.meta.fullPath, route.path)
