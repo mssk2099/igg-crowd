@@ -1,7 +1,9 @@
 <template>
   <Page>
     <PageActionBar>
-      <AButton>添加</AButton>
+      <AButton @click="edit.onAdd()">
+        添加
+      </AButton>
     </PageActionBar>
 
     <SearchForm :service="list">
@@ -27,12 +29,14 @@
       }"
     >
       <ASpace slot="actions" slot-scope="_, record">
-        <a>编辑</a>
+        <a @click="edit.onEdit(record)">编辑</a>
         <RemoveConfirm :service="edit" :data="record">
           删除
         </RemoveConfirm>
       </ASpace>
     </CoreTable>
+
+    <EditDialog :service="edit" />
   </Page>
 </template>
 

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { initAxiosMock } from './mock/post'
+import { initAxiosMock } from './mock'
 import { router } from './router'
 import VueCompositionAPI from '@vue/composition-api'
 import './imports'
@@ -11,7 +11,7 @@ Vue.config.productionTip = false
 
 initAxiosMock()
 
-localStorage.setItem('debug', ['ListService'].join(','))
+localStorage.setItem('debug', ['service:*'].join(','))
 
 new Vue({
   router,

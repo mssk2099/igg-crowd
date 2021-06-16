@@ -12,7 +12,7 @@ type PaginationData<T> = {
   total: number
 }
 
-const log = require('debug')('ListService')
+const log = require('debug')('service:List')
 
 const PageIndexBase = 1
 

@@ -38,19 +38,29 @@ export default defineComponent({
     }
   },
   render() {
+    const {
+      service,
+      pagination,
+      tableProps,
+      onChange,
+      $slots,
+      $scopedSlots
+    } = this
     return (
       <ATable
-        dataSource={this.service.items}
-        rowKey={row => row.id}
-        pagination={this.pagination}
-        loading={this.service.loading}
         {...{
-          props: this.tableProps,
-          on: {
-            change: this.onChange
+          props: {
+            dataSource: service.items,
+            rowKey: row => row.id,
+            pagination,
+            loading: service.loading,
+            ...tableProps
           },
-          slot: this.$slot,
-          scopedSlots: this.$scopedSlots
+          on: {
+            change: onChange
+          },
+          slots: $slots,
+          scopedSlots: $scopedSlots
         }}
       />
     )

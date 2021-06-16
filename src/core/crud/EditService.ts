@@ -1,5 +1,8 @@
+import { defaultErrorHandler } from '../message'
 import { request } from '../request'
 import { ListService } from './ListService'
+
+const log = require('debug')('service:Edit')
 
 /**
  * EditService<Store, T, P>
@@ -68,10 +71,12 @@ export abstract class EditService<
     this.visible = true
     this.params = params
     if (this.getFetchURL()) {
-      await this.fetchFromData()
+      await this.fetchFormData()
     } else {
-      this.data = this.mapFetchedToFormData(params)
+      this.data = this.mapToFormData(params)
     }
+
+    log('Edit formData', this.data)
   }
 
   public async onEditSubmit() {
@@ -111,15 +116,20 @@ export abstract class EditService<
     await this.requestListReload()
   }
 
-  async fetchFromData() {
+  async fetchFormData() {
     this.loading = true
     try {
-      const { data } = await request.get(this.getFetchURL(), {
-        data: this.getFetchParams()
+      const url = this.getFetchURL()
+      const params = this.getFetchParams()
+
+      log('fetchFormData', url, params)
+
+      const { data } = await request.get(url, {
+        data: params
       })
-      this.data = this.mapFetchedToFormData(data)
+      this.data = this.mapToFormData(data)
     } catch (e) {
-      // TODO register global error handler
+      defaultErrorHandler(e)
     } finally {
       this.loading = false
     }
@@ -129,7 +139,7 @@ export abstract class EditService<
     return {}
   }
 
-  mapFetchedToFormData(data: unknown): T {
+  mapToFormData(data: unknown): T {
     return data as T
   }
 
