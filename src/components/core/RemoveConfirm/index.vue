@@ -1,10 +1,5 @@
 <template>
-  <APopconfirm
-    title="确认删除"
-    ok-text="确认"
-    cancel-text="取消"
-    @confirm="onConfirm"
-  >
+  <APopconfirm title="确认删除" @confirm="onConfirm">
     <a class="danger">删除</a>
   </APopconfirm>
 </template>

@@ -19,7 +19,7 @@ export default {
     provide('appTabsService', appTabsService)
 
     return {
-      locale: require('ant-design-vue/lib/locale-provider/zh_CN'),
+      locale: require('ant-design-vue/lib/locale-provider/zh_CN').default,
       appTabsService
     }
   }
