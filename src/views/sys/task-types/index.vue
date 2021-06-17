@@ -2,7 +2,7 @@
   <Page>
     <PageActionBar>
       <AButton @click="edit.onAdd()">
-        添加
+        添加父级
       </AButton>
     </PageActionBar>
 
@@ -10,6 +10,7 @@
       :service="list"
       :data-source="dataSource"
       :table-props="{
+        rowKey: 'module_id',
         columns: [
           {
             title: '制作内容',
@@ -24,6 +25,7 @@
       }"
     >
       <ASpace slot="actions" slot-scope="_, record">
+        <a @click="edit.onAdd(record)">添加子级</a>
         <a @click="edit.onEdit(record)">编辑</a>
         <RemoveConfirm :service="edit" :data="record">
           删除

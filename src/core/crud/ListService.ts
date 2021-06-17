@@ -124,7 +124,7 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
 
       const { list = [], pagination } = await request.get<
         any,
-        PaginationData<T>
+        PaginationData<unknown>
       >(url, {
         data: params
       })

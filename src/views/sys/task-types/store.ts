@@ -9,6 +9,11 @@ class List extends ListService<Store, TaskType> {
 }
 
 class Edit extends EditService<Store, TaskType> {
+  // use parent data injected by edit.onAdd(record)
+  getInitialFormData() {
+    return this.params ? { parent_id: this.params?.module_id } : {}
+  }
+
   getFetchURL(): string {
     return `/settings/module/${this.params.module_id}`
   }

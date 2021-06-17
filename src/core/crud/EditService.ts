@@ -47,11 +47,12 @@ export abstract class EditService<Store = any, T = any, P = T> {
   /**
    * @public
    */
-  public onAdd(): void {
+  public onAdd(params: P): void {
     this.isEdit = false
     this.loading = false
     this.saving = false
     this.visible = true
+    this.params = params
     this.data = this.getInitialFormData() as T
   }
 
@@ -145,7 +146,7 @@ export abstract class EditService<Store = any, T = any, P = T> {
 
       log('fetchFormData', url, params)
 
-      const { data } = await request.get(url, {
+      const data = await request.get<unknown, unknown>(url, {
         params
       })
       this.data = this.mapToFormData(data)

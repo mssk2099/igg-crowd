@@ -58,7 +58,7 @@ export default defineComponent({
         {...{
           props: {
             dataSource: dataSource || service.items,
-            rowKey: row => row.id,
+            rowKey: 'id',
             pagination,
             loading: service.loading,
             ...(tableProps as any)
