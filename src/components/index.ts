@@ -6,6 +6,8 @@ import EditForm from './core/EditForm/index.vue'
 import RemoveConfirm from './core/RemoveConfirm/index.vue'
 import SearchForm from './core/SearchForm/index.vue'
 import CoreTable from './core/Table/index.vue'
+import ImageUpload from './form/ImageUpload/index.vue'
+import FileUpload from './form/FileUpload/index.vue'
 
 const components = {
   Page,
@@ -14,7 +16,9 @@ const components = {
   CoreTable,
   RemoveConfirm,
   EditDialog,
-  EditForm
+  EditForm,
+  ImageUpload,
+  FileUpload
 }
 
 export const registerRootComponents = () => {

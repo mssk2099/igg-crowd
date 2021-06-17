@@ -1,9 +1,11 @@
 import {
   Button,
+  Checkbox,
   FormModel,
   Input,
   Modal,
   Popconfirm,
+  Radio,
   Space,
   Spin,
   Table
@@ -14,6 +16,8 @@ import { registerRootComponents } from './components'
 function registerAntComponents() {
   Vue.use(FormModel)
   Vue.use(Input)
+  Vue.use(Radio)
+  Vue.use(Checkbox)
 
   Vue.component(Button.name, Button)
   Vue.component(Modal.name, Modal)

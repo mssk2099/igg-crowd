@@ -9,3 +9,8 @@ export type RouteMeta = {
   parent?: RouteConfig
   fullPath?: string
 }
+
+export enum EnableStatus {
+  ENABLE = 1,
+  DISABLE = 0
+}

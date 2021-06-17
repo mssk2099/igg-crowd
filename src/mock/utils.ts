@@ -3,3 +3,15 @@ export const Response = (data: unknown) => ({
   message: 'success',
   data
 })
+
+export const PaginationResponse = (list: unknown[]) => ({
+  error: {},
+  data: {
+    list,
+    pagination: {
+      total: 31,
+      current: 1,
+      pageSize: 20
+    }
+  }
+})

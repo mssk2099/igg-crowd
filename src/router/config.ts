@@ -57,7 +57,11 @@ export const dynamicRoutes: RouteConfig[] = [
     children: [
       { path: 'tags', meta: { title: '标签管理' } },
       { path: 'tags-groups', meta: { title: '标签分类' } },
-      { path: 'project-types', meta: { title: '制作内容' } },
+      {
+        path: 'task-types',
+        meta: { title: '制作内容' },
+        component: () => import('../views/sys/task-types/index.vue')
+      },
       { path: 'skill-types', meta: { title: '擅长领域' } },
       { path: 'send-message', meta: { title: '站内信' } },
       { path: 'ops-log', meta: { title: '操作日志' } },
