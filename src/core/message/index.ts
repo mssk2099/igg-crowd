@@ -1,10 +1,11 @@
 import { message } from 'ant-design-vue'
 
 export const defaultErrorHandler = (e: Error) => {
+  console.error(e)
   if ((e as any)._handle) {
     return
   }
-  return showMessage(e.message || '服务繁忙')
+  return showMessage(e.message || '服务繁忙', 'error')
 }
 
 export const showMessage = (

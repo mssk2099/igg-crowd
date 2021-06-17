@@ -5,6 +5,8 @@
         ref="formRef"
         v-bind="{
           model: service.data,
+          labelCol,
+          wrapperCol,
           ...formProps
         }"
       >
@@ -27,6 +29,10 @@ export default defineComponent({
     },
     formProps: {
       type: Object as () => FormModel
+    },
+    labelSpan: {
+      type: Number as () => number,
+      default: 4
     }
   },
   setup(props) {
@@ -47,8 +53,13 @@ export default defineComponent({
       }
     )
 
+    const labelCol = ref({ span: props.labelSpan })
+    const wrapperCol = ref({ span: 24 - props.labelSpan - 2 })
+
     return {
-      formRef
+      formRef,
+      labelCol,
+      wrapperCol
     }
   }
 })

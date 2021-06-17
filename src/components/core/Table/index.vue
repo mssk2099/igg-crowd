@@ -14,6 +14,9 @@ export default defineComponent({
     tableProps: {
       type: Object as () => ATable,
       default: null
+    },
+    dataSource: {
+      type: Array
     }
   },
   setup(props) {
@@ -39,10 +42,14 @@ export default defineComponent({
   },
   render() {
     const {
+      //props
       service,
-      pagination,
       tableProps,
+      dataSource,
+      //
+      pagination,
       onChange,
+      //
       $slots,
       $scopedSlots
     } = this
@@ -50,7 +57,7 @@ export default defineComponent({
       <ATable
         {...{
           props: {
-            dataSource: service.items,
+            dataSource: dataSource || service.items,
             rowKey: row => row.id,
             pagination,
             loading: service.loading,

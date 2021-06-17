@@ -1,4 +1,4 @@
-import { defaultErrorHandler } from '../message'
+import { defaultErrorHandler, showMessage } from '../message'
 import { request } from '../request'
 import { ListService } from './ListService'
 
@@ -83,7 +83,12 @@ export abstract class EditService<Store = any, T = any, P = T> {
       if (typeof this.validator === 'function') {
         await this.validator()
       }
+    } catch (e) {
+      showMessage('请检查表单是否填写完整', 'warn')
+      return
+    }
 
+    try {
       const url = this.getSubmitURL()
       const data = this.data
 

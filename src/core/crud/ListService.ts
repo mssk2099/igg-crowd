@@ -6,10 +6,12 @@ type ListFetchOption = {
 }
 
 type PaginationData<T> = {
-  items: T[]
-  page: number
-  size: number
-  total: number
+  list: T[]
+  pagination: {
+    current: number
+    pageSize: number
+    total: number
+  }
 }
 
 const log = require('debug')('service:List')
@@ -83,11 +85,15 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
       if (typeof this.searchValidator === 'function') {
         await this.searchValidator()
       }
+    } catch (e) {
+      showMessage('请检查表单是否填写完整')
+      return
+    }
+
+    try {
       await this.fetch({ reset: true })
     } catch (e) {
-      console.error(e)
-      // TODO get validate info
-      showMessage('请检查表单是否填写完整')
+      defaultErrorHandler(e)
     }
   }
 
@@ -116,13 +122,15 @@ export abstract class ListService<Store, T = unknown, S = unknown> {
 
       log(`fetch ${url}`, params)
 
-      const res = await request.get(url, {
+      const { list = [], pagination } = await request.get<
+        any,
+        PaginationData<T>
+      >(url, {
         data: params
       })
 
-      const { items = [], total = 0 } = res.data as PaginationData<T>
-      this.items = this.mapListItemsToVO(items)
-      this.total = total
+      this.items = this.mapListItemsToVO(list)
+      this.total = pagination?.total || 0
     } catch (e) {
       defaultErrorHandler(e)
     } finally {

@@ -18,15 +18,15 @@ const request = axios.create({
 })
 
 request.interceptors.response.use(
-  res => {
-    const error = res.data.error
+  response => {
+    const { data, error } = response.data
     if (error?.code > 0) {
       if (typeof GlobalRequestHandlers.onException === 'function') {
-        GlobalRequestHandlers.onException(error || res.data)
+        GlobalRequestHandlers.onException(error)
       }
       return Promise.reject({ ...error, _handle: true })
     }
-    return res.data
+    return data
   },
   error => {
     if (typeof GlobalRequestHandlers.onError === 'function') {

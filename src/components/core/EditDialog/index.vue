@@ -1,6 +1,6 @@
 <script lang="tsx">
 import { computed, defineComponent } from '@vue/composition-api'
-import { Modal as AModal } from 'ant-design-vue'
+import { FormModel, Modal as AModal } from 'ant-design-vue'
 import { EditService } from '../../../core/crud'
 import EditForm from '../EditForm/index.vue'
 
@@ -12,6 +12,9 @@ export default defineComponent({
     },
     modalProps: {
       type: Object as () => AModal
+    },
+    formProps: {
+      type: Object as () => FormModel
     }
   },
   setup(props) {
@@ -24,7 +27,7 @@ export default defineComponent({
     }
   },
   render() {
-    const { service, title, modalProps, $slots, $scopedSlots } = this
+    const { service, title, modalProps, formProps, $slots, $scopedSlots } = this
     return (
       <AModal
         {...{
@@ -50,7 +53,8 @@ export default defineComponent({
         <EditForm
           {...{
             props: {
-              service
+              service,
+              formProps
             } as any,
             slots: $slots,
             scopedSlots: $scopedSlots
